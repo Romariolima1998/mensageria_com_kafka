@@ -1,0 +1,56 @@
+spring:
+
+  application:
+    name: sender_email
+  threads:
+    virtual:
+      enabled: true
+
+  cloud:
+    function:
+      definition: processarEmail
+    stream:
+      instance-index: ${INSTANCE_INDEX:0}
+      instance-count: 2
+      kafka:
+        binder:
+          brokers: localhost:9092
+          configuration:
+            client.id: consumer-${spring.application.name}-${INSTANCE_INDEX:0}
+      bindings:
+        processarEmail-in-0:
+          destination: envio-email-topic
+          group: grupo-email-workers
+          consumer:
+            partitioned: true
+            max-attempts: 3 # Retry automático
+            back-off-initial-interval: 1000
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: seu@email.com  # <-------------------alterar
+    password: 'sua senha de app aki'   # <-------------------alterar
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+    thymeleaf:
+      enable: true
+
+envio:
+  email:
+    remetente: email_remetente_aki  # <-------------------alterar
+
+server:
+  port: ${SERVER_PORT:8081}

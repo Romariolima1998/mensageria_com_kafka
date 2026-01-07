@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: scheduled_email
+  threads:
+    virtual:
+      enabled: true
+
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        enviarEmail-out-0:
+          destination: envio-email-topic
+          producer:
+            partition-key-expression: T(java.lang.Math).random()
+            partition-count: 2 # Garante a criação com 2 partições
+            topicProperties:
+              retention.ms: 3600000
