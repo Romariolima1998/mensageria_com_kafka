@@ -22,7 +22,7 @@ public class AgendadorController {
     private final AgendadorService service;
 
     @PostMapping
-    public ResponseEntity<String> agendar(@RequestBody MessageDTO dto) throws InterruptedException {
+    public ResponseEntity<String> agendar(@RequestBody MessageDTO dto){
         log.info("\n iniciando agendamento na thread: " + Thread.currentThread() + "\n");
         service.agendar(dto);
         log.info("fim do agendamento");

@@ -14,8 +14,7 @@ public class AgendadorService {
     private final StreamBridge streamBridge;
 
     @Async
-    public void agendar(MessageDTO dto) throws InterruptedException {
-        Thread.sleep(2000L);
+    public void agendar(MessageDTO dto){
         streamBridge.send("enviarEmail-out-0", dto);
         log.info("\n  agendado na thread: " + Thread.currentThread() + "\n");
     }
